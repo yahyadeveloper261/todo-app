@@ -10,6 +10,9 @@ export default function App() {
   const [duedate, setDuedate] = useState("");
   const [priority, setPriority] = useState("medium");
   const [filterp, setFilterp] = useState("all");
+  const [sort,setSort]=useState("default");
+  const [category,setCategory]=useState("work");
+  const [filterCategory,setFilterCategory] = useState("all");
   
   const [dark,setDark]=useState(()=>{
 try {
@@ -68,6 +71,7 @@ if (!duedate) {
                 name: input.trim(),
                 date: duedate,
                 priority: priority,
+                category:category
               }
             : item
         )
@@ -83,6 +87,7 @@ if (!duedate) {
           completed: false,
           date: duedate,
           priority: priority,
+          category:category
         },
       ]);
     }
@@ -90,6 +95,7 @@ if (!duedate) {
     setInput("");
     setDuedate("");
     setPriority("medium");
+    setCategory("work")
   };
 
   // Edit Todo
@@ -100,6 +106,7 @@ if (!duedate) {
       setInput(task.name);
       setDuedate(task.date);
       setPriority(task.priority);
+      setCategory(task.category)
       setEditId(id);
     }
   };
@@ -139,6 +146,23 @@ if (!duedate) {
       )
     );
   };
+
+  ///***************************Progess bar**************////
+  const completed=todos.filter(prev=>prev.completed).length
+  const total=todos.length;
+  const progress=total===0?0:Math.round((completed/total)*100);
+///**********************************Sorting */
+const PriorityOrder={
+  high:1,medium:2,low:3
+}
+const sortedTodos = [...todos].sort((a,b)=>{
+  return sort === "default"
+    ? 0
+    : sort === "priority"
+    ? PriorityOrder[a.priority] - PriorityOrder[b.priority]
+    : new Date(a.date) - new Date(b.date)
+})
+////************************IsOverRide Date */
 
   ///////broswer Futures
   return(
@@ -332,6 +356,21 @@ dark:text-black
       <option value="low">Low</option>
     </select>
 
+<select value={category} onChange={(e)=>setCategory(e.target.value)}
+        className="
+      p-3
+      rounded-lg
+      border
+      bg-white
+      dark:bg-slate-700
+      dark:text-white
+      border-gray-300
+      dark:border-slate-600
+      ">
+      <option value="work">Work</option>
+      <option value="study" >Study</option>
+      <option value="personal">Personal</option>
+    </select>
 
     <button
       onClick={add}
@@ -375,7 +414,25 @@ dark:text-black
       dark:border-slate-600
       "
     />
+             {/* sorted ui */}
 
+    <select value={sort} onChange={(e)=>setSort(e.target.value)}
+        className="
+      p-3
+      rounded-lg
+      border
+      bg-white
+      dark:bg-slate-700
+      dark:text-white
+      border-gray-300
+      dark:border-slate-600
+      ">
+      <option value="default">Default</option>
+      <option value="priority">Priority</option>
+      <option value="duedate">Duedate</option>
+    </select>
+
+ 
 
     <select
       value={filterp}
@@ -397,7 +454,26 @@ dark:text-black
       <option value="low">Low</option>
     </select>
 
+  <select className="
+      p-3
+      rounded-lg
+      border
+      bg-white
+      dark:bg-slate-700
+      dark:text-white
+      border-gray-300
+      dark:border-slate-600
+      "
+  value={filterCategory}
+  onChange={(e)=>setFilterCategory(e.target.value)}
+>
+  <option value="all">All Category</option>
+  <option value="work">Work</option>
+  <option value="study">Study</option>
+  <option value="personal">Personal</option>
+</select>
   </div>
+
 
 {todos.length === 0 && (
   <p className="text-center text-gray-500 mt-5">
@@ -405,11 +481,28 @@ dark:text-black
   </p>
 )}
 
+
+<div className="mt-5">
+ <div className="flex justify-between mb-2">
+  <span className={dark?"text-white":"text-gray-800"}>Progress</span>
+  <span className={dark?"text-white":"text-gray-800"}>
+    {completed}/{total} ({progress}%)
+    </span>
+    </div>
+    <div className="w-full h-3 bg-gray-300 rounded-full overflow-hidden">
+
+      <div className="h-3 bg-green-500 transition-all duration-500" style={{ width: `${progress}%` }} >
+
+      </div>
+    </div>
+ 
+</div>
+
   {/* Todo List */}
   <ul className="mt-5 space-y-3">
 
     {
-      todos
+      sortedTodos.filter(prev=>filterCategory==="all"?true:prev.category===filterCategory)
       .filter(prev =>
         filter === "all"
           ? true
@@ -465,16 +558,28 @@ ${todo.completed ? "line-through opacity-50" : ""}
   </div>
 
   <span
-    className={
-      todo.priority === "high"
-        ? "text-red-500 font-bold"
-        : todo.priority === "medium"
-        ? "text-yellow-500 font-bold"
-        : "text-green-500 font-bold"
-    }
-  >
-    {todo.priority}
-  </span>
+  className={
+    todo.priority === "high"
+      ? "text-red-500 font-bold"
+      : todo.priority === "medium"
+      ? "text-yellow-500 font-bold"
+      : "text-green-500 font-bold"
+  }
+>
+  {todo.priority}
+</span>
+
+<span
+  className={
+    todo.category === "work"
+      ? "text-blue-500 font-bold"
+      : todo.category === "study"
+      ? "text-purple-500 font-bold"
+      : "text-green-500 font-bold"
+  }
+>
+  {todo.category}
+</span>
 
   <div className="flex gap-2">
     <button
