@@ -1,7 +1,8 @@
 
 import { useEffect, useState } from "react";
-
+import { useRef } from "react";
 export default function App() {
+  const inputRef=useRef(null);
   // Input States
   const [input, setInput] = useState("");
   const [editId, setEditId] = useState(null);
@@ -45,7 +46,7 @@ try {
   // ================= Enter Key =================
   const en = (e) => {
     if (e.key === "Enter") {
-      add();
+    AddUpdate()
     }
   };
 
@@ -108,6 +109,9 @@ if (!duedate) {
       setPriority(task.priority);
       setCategory(task.category)
       setEditId(id);
+      setTimeout(()=>{
+inputRef.current.focus();
+      },0)
     }
   };
 
@@ -275,6 +279,7 @@ dark:text-black
 
   <input
     type="text"
+    ref={inputRef}
     placeholder="Enter Todo"
     value={input}
     onChange={(e) => setInput(e.target.value)}
