@@ -6,10 +6,10 @@ export default function App() {
   const [input, setInput] = useState("");
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filtercompleted, setFiltercompleted] = useState("all");
   const [duedate, setDuedate] = useState("");
   const [priority, setPriority] = useState("medium");
-  const [filterp, setFilterp] = useState("all");
+  const [filterpriority, setFilterpriority] = useState("all");
   const [sort,setSort]=useState("default");
   const [category,setCategory]=useState("work");
   const [filterCategory,setFilterCategory] = useState("all");
@@ -52,7 +52,7 @@ try {
   // ================= CRUD Operations =================
 
   // Add / Update Todo
-  const add = () => {
+  const AddUpdate = () => {
    if (!input.trim()) {
   alert("Please enter a todo");
   return;
@@ -214,7 +214,7 @@ dark:text-black
 <div className="flex gap-3 mt-5 flex-wrap">
 
   <button
-    onClick={() => setFilter("all")}
+    onClick={() => setFiltercompleted("all")}
     className="
       px-5 py-2
       rounded-full
@@ -232,7 +232,7 @@ dark:text-black
   </button>
 
   <button
-    onClick={() => setFilter("marked")}
+    onClick={() => setFiltercompleted("marked")}
     className="
       px-5 py-2
       rounded-full
@@ -250,7 +250,7 @@ dark:text-black
   </button>
 
   <button
-    onClick={() => setFilter("pending")}
+    onClick={() => setFiltercompleted("pending")}
     className="
       px-5 py-2
       rounded-full
@@ -357,7 +357,8 @@ dark:text-black
     </select>
 
 <select value={category} onChange={(e)=>setCategory(e.target.value)}
-        className="
+    className="
+      flex-1
       p-3
       rounded-lg
       border
@@ -373,7 +374,7 @@ dark:text-black
     </select>
 
     <button
-      onClick={add}
+      onClick={AddUpdate}
       className="
       px-6
       py-3
@@ -418,15 +419,17 @@ dark:text-black
 
     <select value={sort} onChange={(e)=>setSort(e.target.value)}
         className="
-      p-3
-      rounded-lg
-      border
-      bg-white
-      dark:bg-slate-700
-      dark:text-white
-      border-gray-300
-      dark:border-slate-600
-      ">
+    flex-1
+    min-w-0
+    p-3
+    rounded-lg
+    border
+    bg-white
+    dark:bg-slate-700
+    dark:text-white
+    border-gray-300
+    dark:border-slate-600
+  ">
       <option value="default">Default</option>
       <option value="priority">Priority</option>
       <option value="duedate">Duedate</option>
@@ -435,18 +438,20 @@ dark:text-black
  
 
     <select
-      value={filterp}
-      onChange={(e) => setFilterp(e.target.value)}
-      className="
-      p-3
-      rounded-lg
-      border
-      bg-white
-      dark:bg-slate-700
-      dark:text-white
-      border-gray-300
-      dark:border-slate-600
-      "
+      value={filterpriority}
+      onChange={(e) => setFilterpriority(e.target.value)}
+       className="
+    flex-1
+    min-w-0
+    p-3
+    rounded-lg
+    border
+    bg-white
+    dark:bg-slate-700
+    dark:text-white
+    border-gray-300
+    dark:border-slate-600
+  "
     >
       <option value="all">All Priority</option>
       <option value="medium">Medium</option>
@@ -454,16 +459,18 @@ dark:text-black
       <option value="low">Low</option>
     </select>
 
-  <select className="
-      p-3
-      rounded-lg
-      border
-      bg-white
-      dark:bg-slate-700
-      dark:text-white
-      border-gray-300
-      dark:border-slate-600
-      "
+  <select  className="
+    flex-1
+    min-w-0
+    p-3
+    rounded-lg
+    border
+    bg-white
+    dark:bg-slate-700
+    dark:text-white
+    border-gray-300
+    dark:border-slate-600
+  "
   value={filterCategory}
   onChange={(e)=>setFilterCategory(e.target.value)}
 >
@@ -504,16 +511,16 @@ dark:text-black
     {
       sortedTodos.filter(prev=>filterCategory==="all"?true:prev.category===filterCategory)
       .filter(prev =>
-        filter === "all"
+        filtercompleted === "all"
           ? true
-          : filter === "marked"
+          : filtercompleted === "marked"
           ? prev.completed
           : !prev.completed
       )
       .filter(prev =>
-        filterp === "all"
+        filterpriority === "all"
           ? true
-          : prev.priority === filterp
+          : prev.priority === filterpriority
       )
       .filter(prev =>
         prev.name.toLowerCase().includes(search.toLowerCase())
