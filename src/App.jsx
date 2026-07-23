@@ -396,7 +396,7 @@ dark:text-black
 
 
   {/* Search + Priority Filter */}
-  <div className="flex flex-col sm:flex-row gap-3">
+  <div className="flex flex-col lg:flex-row flex-wrap gap-3">
 
     <input
       type="text"
