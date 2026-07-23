@@ -25,7 +25,7 @@ try {
 
   });
   useEffect(()=>{try {
-     localStorage.setItem("dark",JSON.stringify(dark))
+     localStorage.setItem("dark",JSON.stringify(dark));
   } catch{
   console.log("Dark mode save error");
   }},[dark])
